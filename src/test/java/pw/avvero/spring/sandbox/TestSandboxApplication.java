@@ -7,7 +7,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 public class TestSandboxApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.from(SandboxApplication::main).with(TestSandboxApplication.class).run(args);
+		SpringApplication.from(SandboxApplication::main)
+				.with(ContainersConfiguration.class)
+				.run(args);
 	}
 
 }
