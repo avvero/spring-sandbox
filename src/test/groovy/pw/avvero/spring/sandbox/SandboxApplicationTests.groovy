@@ -1,4 +1,4 @@
-package pw.avvero.spring.sandbox.account
+package pw.avvero.spring.sandbox
 
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles

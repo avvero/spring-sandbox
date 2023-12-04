@@ -6,7 +6,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
 @ContextConfiguration(classes = {ContainersConfiguration.class})
-class SandboxApplicationTests {
+class SandboxApplicationJUnitTests {
 
     @Test
     void contextLoads() {
