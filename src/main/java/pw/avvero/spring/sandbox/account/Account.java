@@ -21,9 +21,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_id_seq")
     @Column(name = "id", columnDefinition = "serial")
     private Integer id;
-
     private Integer balance;
-
     @Version
     private long version;
 }

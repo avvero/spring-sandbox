@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class AccountInfoResponse extends CommonResponse {
-
     private Integer id;
     private Integer balance;
-
 }

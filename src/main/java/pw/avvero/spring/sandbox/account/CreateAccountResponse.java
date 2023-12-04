@@ -10,7 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CreateAccountResponse extends CommonResponse {
-
     private Number id;
-
 }

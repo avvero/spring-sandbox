@@ -14,13 +14,10 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class AccountService {
-
     private final AccountRepository accountRepository;
-
     public Account createAccount() {
         return accountRepository.save(Account.builder().balance(0).build());
     }
-
     public Optional<Account> findById(Integer id) {
         return accountRepository.findById(id);
     }

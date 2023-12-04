@@ -10,7 +10,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonResponse implements Serializable {
-
     private String resultCode = "Ok";
-
 }

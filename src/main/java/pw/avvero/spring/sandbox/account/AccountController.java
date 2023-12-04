@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("/api/v1/account")
 public class AccountController {
-
     private final AccountService accountService;
 
     @PostMapping("create")
