@@ -1,4 +1,4 @@
-package pw.avvero.spring.sandbox.account;
+package pw.avvero.spring.sandbox;
 
 
 import org.springframework.context.annotation.Configuration;
