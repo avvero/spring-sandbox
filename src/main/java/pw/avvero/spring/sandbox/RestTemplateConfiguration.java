@@ -3,6 +3,8 @@ package pw.avvero.spring.sandbox;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.zalando.logbook.Logbook;
+import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 
 import java.util.Collections;
 
@@ -10,9 +12,9 @@ import java.util.Collections;
 public class RestTemplateConfiguration {
 
     @Bean
-    public RestTemplate restTemplate(LoggingInterceptor loggingInterceptor) {
+    public RestTemplate restTemplate(LogbookClientHttpRequestInterceptor interceptor) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(loggingInterceptor));
+        restTemplate.setInterceptors(Collections.singletonList(interceptor));
         return restTemplate;
     }
 

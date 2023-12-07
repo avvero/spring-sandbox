@@ -13,7 +13,6 @@ import pw.avvero.spring.sandbox.ContainersConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static org.springframework.test.web.client.ExpectedCount.manyTimes
 import static org.springframework.test.web.client.ExpectedCount.once
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
@@ -21,7 +20,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @SpringBootTest
 @ActiveProfiles(profiles = "test")
 @ContextConfiguration(classes = [ContainersConfiguration])
-class GetForecastTests extends Specification {
+class B1GetForecastTests extends Specification {
 
     @Autowired
     WeatherService weatherService
@@ -36,26 +35,32 @@ class GetForecastTests extends Specification {
 
     def "Forecast for provided city London is 42"() {
         setup:
+        def requestCaptor = new RequestCaptor()
         mockServer.expect(once(), requestTo("https://external-weather-api.com"))
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
-                .andRespond(withSuccess('{"result": 42}', MediaType.APPLICATION_JSON));
+                .andExpect(requestCaptor)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        weatherService.getForecast("London")
+        def forecast = weatherService.getForecast("London")
         then:
-        mockServer.verify()
+        forecast == "42"
+        requestCaptor.times == 1
+        requestCaptor.entity.city == "London"
     }
 
     def "Forecast for provided city Unknown is 42"() {
         setup:
+        def requestCaptor = new RequestCaptor()
         mockServer.expect(once(), requestTo("https://external-weather-api.com"))
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
-                .andRespond(withSuccess('{"result": 42}', MediaType.APPLICATION_JSON));
+                .andExpect(requestCaptor)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        weatherService.getForecast("Unknown")
+        def forecast = weatherService.getForecast("Unknown")
         then:
-        mockServer.verify()
+        forecast == "42"
+        requestCaptor.times == 1
+        requestCaptor.entity.city == "London"
     }
 
 }
