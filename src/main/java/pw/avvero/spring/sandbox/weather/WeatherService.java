@@ -40,7 +40,7 @@ public class WeatherService {
 
     /**
      * Retrieves the weather forecast for the specified city.
-     * <br><img src="classpath:diagram/forecast.png" alt="Forecast integration">
+     * <br><img src="https://github.com/avvero/spring-sandbox/blob/main/src/main/resources/diagram/forecast.png?raw=true" alt="Forecast integration">
      *
      * @param city The name of the city for which the forecast is requested.
      * @return A string representing the weather forecast for the specified city.
