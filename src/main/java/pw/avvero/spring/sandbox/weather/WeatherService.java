@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
-import java.util.Map;
 
 @Service
 public class WeatherService {
@@ -39,6 +38,13 @@ public class WeatherService {
         this.url = url;
     }
 
+    /**
+     * Retrieves the weather forecast for the specified city.
+     * <br><img src="classpath:diagram/forecast.png" alt="Forecast integration">
+     *
+     * @param city The name of the city for which the forecast is requested.
+     * @return A string representing the weather forecast for the specified city.
+     */
     public String getForecast(String city) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

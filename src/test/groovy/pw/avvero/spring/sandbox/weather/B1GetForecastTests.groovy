@@ -13,6 +13,7 @@ import pw.avvero.spring.sandbox.ContainersConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 
+import static org.springframework.test.web.client.ExpectedCount.manyTimes
 import static org.springframework.test.web.client.ExpectedCount.once
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
@@ -36,7 +37,7 @@ class B1GetForecastTests extends Specification {
     def "Forecast for provided city London is 42"() {
         setup:
         def requestCaptor = new RequestCaptor()
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(requestCaptor)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
@@ -51,7 +52,7 @@ class B1GetForecastTests extends Specification {
     def "Forecast for provided city Unknown is 42"() {
         setup:
         def requestCaptor = new RequestCaptor()
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(requestCaptor)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));

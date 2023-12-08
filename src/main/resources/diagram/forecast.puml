@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+participant a as "Service A"
+participant w as "Weather API"
+-> a++: Service#getForecast($city)
+a -> w++: POST https://external-weather-api.com
+note left w
+{
+    "city": "$city"
+}
+end note
+w -> a--: Weather for city
+note right a
+{
+    "result": "$forecast"
+}
+end note
+<- a--: $forecast
+@enduml
