@@ -34,11 +34,11 @@ class A1GetForecastTests extends Specification {
     }
 
     def "Forecast for provided city London is 42"() {
-        setup:
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+        setup:          // (1)
+        mockServer.expect(once(), requestTo("https://external-weather-api.com"))          // (2)
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
-                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
+                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (3)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON)); // (4)
         when:
         def forecast = weatherService.getForecast("London")
         then:
@@ -50,10 +50,10 @@ class A1GetForecastTests extends Specification {
         setup:
         mockServer.expect(once(), requestTo("https://external-weather-api.com"))
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
+                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (4)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")
+        def forecast = weatherService.getForecast("Unknown")                              // (5)
         then:
         forecast == "42"
         mockServer.verify()
