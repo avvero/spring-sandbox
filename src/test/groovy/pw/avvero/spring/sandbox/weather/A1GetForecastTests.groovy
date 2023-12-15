@@ -39,21 +39,34 @@ class A1GetForecastTests extends Specification {
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (3)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON)); // (4)
-        when:
+        when:          // (5)
         def forecast = weatherService.getForecast("London")
+        then:          // (6)
+        forecast == "42"
+        mockServer.verify()
+    }
+
+    def "Incorrect city to get forecast"() {
+        setup:
+        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (1)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
+        when:
+        def forecast = weatherService.getForecast("Unknown")                              // (2)
         then:
         forecast == "42"
         mockServer.verify()
     }
 
-    def "Forecast for provided city Unknown is 42"() {
+    def "Incorrect uri for mock"() {
         setup:
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+        mockServer.expect(once(), requestTo("https://foo.com"))                           // (1)
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (4)
+                .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")                              // (5)
+        def forecast = weatherService.getForecast("Unknown")
         then:
         forecast == "42"
         mockServer.verify()
