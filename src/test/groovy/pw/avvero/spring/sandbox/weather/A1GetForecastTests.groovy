@@ -70,7 +70,7 @@ class A1GetForecastTests extends Specification {
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")
+        def forecast = weatherService.getForecast("London")
         then:
         forecast == "42"
         mockServer.verify()

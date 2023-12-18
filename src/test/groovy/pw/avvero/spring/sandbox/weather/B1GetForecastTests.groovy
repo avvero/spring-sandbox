@@ -76,7 +76,7 @@ class B1GetForecastTests extends Specification {
                 .andExpect(requestCaptor)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")
+        def forecast = weatherService.getForecast("London")
         then:
         forecast == "42"
         requestCaptor.times == 1
