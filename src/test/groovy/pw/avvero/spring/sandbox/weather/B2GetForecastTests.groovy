@@ -2,6 +2,7 @@ package pw.avvero.spring.sandbox.weather
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.DirtiesContext
@@ -22,7 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*
         "app.weather.url=http://localhost:10080"
 ])
 @DirtiesContext
-class A2GetForecastTests extends Specification {
+class B2GetForecastTests extends Specification {
 
     @Autowired
     WeatherService weatherService
@@ -43,49 +44,18 @@ class A2GetForecastTests extends Specification {
     }
 
     def "Forecast for provided city London is 42"() {
-        setup:          // (1)
-        wireMockServer.stubFor(post(urlEqualTo("/forecast"))                              // (2)
-                .willReturn(aResponse()                                                   // (4)
-                        .withBody('{"result": "42"}')
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")))
-        when:          // (5)
-        def forecast = weatherService.getForecast("London")
-        then:          // (6)
-        forecast == "42"
-        wireMockServer.verify(postRequestedFor(urlEqualTo("/forecast"))
-                .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))
-    }
-
-    def "Incorrect city in request"() {
         setup:
-        wireMockServer.stubFor(post(urlEqualTo("/forecast"))
+        StubMapping forecastMapping = wireMockServer.stubFor(post(urlEqualTo("/forecast"))
                 .willReturn(aResponse()
                         .withBody('{"result": "42"}')
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")))
-        when:
-        def forecast = weatherService.getForecast("London")                              // (1)
-        then:
-        forecast == "42"
-        wireMockServer.verify(postRequestedFor(urlEqualTo("/forecast"))
-                .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))
-    }
-
-    def "Incorrect uri for mock"() {
-        setup:
-        wireMockServer.stubFor(post(urlEqualTo("/unknown"))                               // (1)
-                .withRequestBody(matchingJsonPath('$.city', equalTo("London")))
-                .willReturn(aResponse()
-                        .withBody('{"result": "42"}')
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")))
+        def requestCaptor = new WiredRequestCaptor(wireMockServer, forecastMapping)
         when:
         def forecast = weatherService.getForecast("London")
         then:
         forecast == "42"
-        wireMockServer.verify(postRequestedFor(urlEqualTo("/forecast"))
-                .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))
+        requestCaptor.times == 1
+        requestCaptor.body.city == "London"
     }
-
 }

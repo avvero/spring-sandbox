@@ -1,6 +1,6 @@
 package pw.avvero.spring.sandbox.weather
 
-import org.hamcrest.Matchers
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpMethod
@@ -14,7 +14,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 import static org.springframework.test.web.client.ExpectedCount.manyTimes
-import static org.springframework.test.web.client.ExpectedCount.once
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
 
@@ -49,8 +48,8 @@ class B1GetForecastTests extends Specification {
         def forecast = weatherService.getForecast("London")
         then:          // (6)
         forecast == "42"
-        requestCaptor.times == 1              // (7)
-        requestCaptor.entity.city == "London" // (8)
+        requestCaptor.times == 1            // (7)
+        requestCaptor.body.city == "London" // (8)
     }
 
     def "Incorrect city in request"() {
@@ -65,7 +64,7 @@ class B1GetForecastTests extends Specification {
         then:
         forecast == "42"
         requestCaptor.times == 1
-        requestCaptor.entity.city == "London"
+        requestCaptor.body.city == "London"
     }
 
     def "Incorrect uri for mock"() {
@@ -80,7 +79,7 @@ class B1GetForecastTests extends Specification {
         then:
         forecast == "42"
         requestCaptor.times == 1
-        requestCaptor.entity.city == "London"
+        requestCaptor.body.city == "London"
     }
 
 }

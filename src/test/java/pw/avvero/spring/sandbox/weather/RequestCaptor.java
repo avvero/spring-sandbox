@@ -17,7 +17,7 @@ public class RequestCaptor implements RequestMatcher {
 
     private final AtomicInteger times = new AtomicInteger(0);
     private String bodyString;
-    private Object entity;
+    private Object body;
     private HttpHeaders headers = new HttpHeaders();
 
     public void match(ClientHttpRequest request) throws AssertionError {
@@ -25,7 +25,7 @@ public class RequestCaptor implements RequestMatcher {
         MockClientHttpRequest mockRequest = (MockClientHttpRequest) request;
         this.bodyString = mockRequest.getBodyAsString();
         if (StringUtils.hasLength(this.bodyString)) {
-            this.entity = (new JsonSlurper()).parseText(mockRequest.getBodyAsString());
+            this.body = (new JsonSlurper()).parseText(mockRequest.getBodyAsString());
         }
 
         this.headers = mockRequest.getHeaders();
@@ -39,12 +39,12 @@ public class RequestCaptor implements RequestMatcher {
         Awaitility.await()
                 .alias("Request for " + this.getClass().getCanonicalName())
                 .atMost(timeout, unit)
-                .pollInterval(100L, TimeUnit.MILLISECONDS).until(() -> this.entity != null);
+                .pollInterval(100L, TimeUnit.MILLISECONDS).until(() -> this.body != null);
     }
 
     public void clear() {
         this.times.set(0);
-        this.entity = null;
+        this.body = null;
         this.headers = null;
     }
 }
