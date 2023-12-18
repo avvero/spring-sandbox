@@ -50,7 +50,7 @@ public class WeatherService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         WeatherRequest request = new WeatherRequest(city);
         HttpEntity<WeatherRequest> requestEntity = new HttpEntity<>(request, headers);
-        WeatherResponse response = restTemplate.postForObject(url, requestEntity, WeatherResponse.class);
+        WeatherResponse response = restTemplate.postForObject(url + "/forecast", requestEntity, WeatherResponse.class);
         return response.result;
     }
 }

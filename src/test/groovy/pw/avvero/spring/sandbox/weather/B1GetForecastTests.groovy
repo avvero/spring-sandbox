@@ -34,30 +34,34 @@ class B1GetForecastTests extends Specification {
         mockServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
     }
 
-        def "Forecast for provided city London is 42"() {
-            setup:          // (1)
-            def requestCaptor = new RequestCaptor()
-            mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com"))          // (2)
-                    .andExpect(method(HttpMethod.POST))
-                    .andExpect(requestCaptor)                                                      // (3)
-                    .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));      // (4)
-            when:          // (5)
-            def forecast = weatherService.getForecast("London")
-            then:          // (6)
-            forecast == "42"
-            requestCaptor.times == 1              // (7)
-            requestCaptor.entity.city == "London" // (8)
-        }
+    def cleanup() {
+        mockServer.reset()
+    }
 
-    def "Incorrect city to get forecast"() {
+    def "Forecast for provided city London is 42"() {
+        setup:          // (1)
+        def requestCaptor = new RequestCaptor()
+        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com/forecast")) // (2)
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(requestCaptor)                                                      // (3)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));      // (4)
+        when:          // (5)
+        def forecast = weatherService.getForecast("London")
+        then:          // (6)
+        forecast == "42"
+        requestCaptor.times == 1              // (7)
+        requestCaptor.entity.city == "London" // (8)
+    }
+
+    def "Incorrect city in request"() {
         setup:
         def requestCaptor = new RequestCaptor()
-        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com"))
+        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com/forecast"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(requestCaptor)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")
+        def forecast = weatherService.getForecast("London")
         then:
         forecast == "42"
         requestCaptor.times == 1

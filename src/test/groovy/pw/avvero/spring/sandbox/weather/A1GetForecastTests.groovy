@@ -33,9 +33,13 @@ class A1GetForecastTests extends Specification {
         mockServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
     }
 
+    def cleanup() {
+        mockServer.reset()
+    }
+
     def "Forecast for provided city London is 42"() {
         setup:          // (1)
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))          // (2)
+        mockServer.expect(once(), requestTo("https://external-weather-api.com/forecast")) // (2)
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (3)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON)); // (4)
@@ -46,14 +50,14 @@ class A1GetForecastTests extends Specification {
         mockServer.verify()
     }
 
-    def "Incorrect city to get forecast"() {
+    def "Incorrect city in request"() {
         setup:
-        mockServer.expect(once(), requestTo("https://external-weather-api.com"))
+        mockServer.expect(once(), requestTo("https://external-weather-api.com/forecast"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (1)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("Unknown")                              // (2)
+        def forecast = weatherService.getForecast("London")                              // (2)
         then:
         forecast == "42"
         mockServer.verify()
@@ -61,7 +65,7 @@ class A1GetForecastTests extends Specification {
 
     def "Incorrect uri for mock"() {
         setup:
-        mockServer.expect(once(), requestTo("https://foo.com"))                           // (1)
+        mockServer.expect(once(), requestTo("https://foo.com/forecast"))                  // (1)
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
