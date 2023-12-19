@@ -46,8 +46,8 @@ class A1GetForecastTests extends Specification {
         when:          // (5)
         def forecast = weatherService.getForecast("London")
         then:          // (6)
-        forecast == "42"
-        mockServer.verify()
+        forecast == "42"     // (7)
+        mockServer.verify()  // (8)
     }
 
     def "Incorrect city in request"() {
@@ -57,7 +57,7 @@ class A1GetForecastTests extends Specification {
                 .andExpect(jsonPath('$.city', Matchers.equalTo("London")))                // (1)
                 .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));
         when:
-        def forecast = weatherService.getForecast("London")                              // (2)
+        def forecast = weatherService.getForecast("Unknown")                              // (2)
         then:
         forecast == "42"
         mockServer.verify()

@@ -65,7 +65,7 @@ class A2GetForecastTests extends Specification {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")))
         when:
-        def forecast = weatherService.getForecast("London")                              // (1)
+        def forecast = weatherService.getForecast("Unknown")                              // (1)
         then:
         forecast == "42"
         wireMockServer.verify(postRequestedFor(urlEqualTo("/forecast"))

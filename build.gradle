@@ -45,7 +45,7 @@ dependencies {
 	testImplementation 'org.codehaus.groovy:groovy-json:3.0.19'
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 	testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
-	testImplementation "com.github.tomakehurst:wiremock-jre8-standalone:2.35.0"
+	testImplementation 'org.wiremock:wiremock-standalone:3.3.1'
 }
 
 tasks.named('test') {

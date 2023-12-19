@@ -34,7 +34,6 @@ class B2GetForecastTests extends Specification {
 
     def setup() {
         wireMockServer = new WireMockServer(WireMockConfiguration.options()
-                .maxRequestJournalEntries(100)
                 .port(10080))
         wireMockServer.start()
     }
