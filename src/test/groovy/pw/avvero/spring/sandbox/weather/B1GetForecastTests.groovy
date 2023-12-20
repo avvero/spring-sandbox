@@ -50,6 +50,7 @@ class B1GetForecastTests extends Specification {
         forecast == "42"
         requestCaptor.times == 1            // (7)
         requestCaptor.body.city == "London" // (8)
+        requestCaptor.headers.get("Content-Type") == ["application/json"]
     }
 
     def "Incorrect city in request"() {

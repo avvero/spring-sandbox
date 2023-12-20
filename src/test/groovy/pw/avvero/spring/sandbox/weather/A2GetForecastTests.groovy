@@ -54,7 +54,7 @@ class A2GetForecastTests extends Specification {
         then:          // (6)
         forecast == "42"
         wireMockServer.verify(postRequestedFor(urlEqualTo("/forecast"))
-                .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))
+                .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))          // (7)
     }
 
     def "Incorrect city in request"() {

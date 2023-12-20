@@ -56,5 +56,6 @@ class B2GetForecastTests extends Specification {
         forecast == "42"
         requestCaptor.times == 1
         requestCaptor.body.city == "London"
+        requestCaptor.headers.get("Content-Type") == ["application/json"]
     }
 }
