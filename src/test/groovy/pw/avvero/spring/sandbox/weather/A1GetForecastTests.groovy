@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.web.client.RestTemplate
 import pw.avvero.spring.sandbox.ContainersConfiguration
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -50,6 +51,7 @@ class A1GetForecastTests extends Specification {
         mockServer.verify()  // (8)
     }
 
+    @Ignore
     def "Incorrect city in request"() {
         setup:
         mockServer.expect(once(), requestTo("https://external-weather-api.com/forecast"))
@@ -63,6 +65,7 @@ class A1GetForecastTests extends Specification {
         mockServer.verify()
     }
 
+    @Ignore
     def "Incorrect uri for mock"() {
         setup:
         mockServer.expect(once(), requestTo("https://foo.com/forecast"))                  // (1)

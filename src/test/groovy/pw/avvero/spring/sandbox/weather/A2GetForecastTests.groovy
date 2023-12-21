@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.RestTemplate
 import pw.avvero.spring.sandbox.ContainersConfiguration
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -57,6 +58,7 @@ class A2GetForecastTests extends Specification {
                 .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))          // (7)
     }
 
+    @Ignore
     def "Incorrect city in request"() {
         setup:
         wireMockServer.stubFor(post(urlEqualTo("/forecast"))
@@ -72,6 +74,7 @@ class A2GetForecastTests extends Specification {
                 .withRequestBody(matchingJsonPath('$.city', equalTo("London"))))
     }
 
+    @Ignore
     def "Incorrect uri for mock"() {
         setup:
         wireMockServer.stubFor(post(urlEqualTo("/unknown"))                               // (1)

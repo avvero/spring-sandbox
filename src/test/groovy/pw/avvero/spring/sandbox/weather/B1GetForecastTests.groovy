@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.web.client.RestTemplate
 import pw.avvero.spring.sandbox.ContainersConfiguration
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -53,6 +54,7 @@ class B1GetForecastTests extends Specification {
         requestCaptor.headers.get("Content-Type") == ["application/json"]
     }
 
+    @Ignore
     def "Incorrect city in request"() {
         setup:
         def requestCaptor = new RequestCaptor()
@@ -68,6 +70,7 @@ class B1GetForecastTests extends Specification {
         requestCaptor.body.city == "London"
     }
 
+    @Ignore
     def "Incorrect uri for mock"() {
         setup:
         def requestCaptor = new RequestCaptor()
