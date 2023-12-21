@@ -1,5 +1,10 @@
 # Sandbox for spring related stuff
 
+## Testcontainers configuration
+
+Testcontainers [configuration](https://github.com/avvero/spring-sandbox/blob/main/src/test/java/pw/avvero/spring/sandbox/ContainersConfiguration.java)
+for `postgres` using `@ServiceConnection` feature from spring.
+
 ## Ordering the Chaos: Arranging HTTP Request Testing in Spring
 
 Code related to article, where I would like to describe an approach to writing tests with a clear division into separate 
