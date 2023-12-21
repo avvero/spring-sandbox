@@ -12,4 +12,5 @@ system behavior. The tests under consideration are written using the Spock Frame
 MockRestServiceServer will be used as the mocking mechanism. There will also be a few words about WireMock.
 
 [Link to article (RUS)](https://habr.com/ru/articles/781812)
+
 [Link to article (ENG)](https://medium.com/@avvero.abernathy/ordering-chaos-arranging-http-request-testing-in-spring-c625520d2418)
