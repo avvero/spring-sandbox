@@ -28,7 +28,7 @@ class A1GetForecastTests extends Specification {
     @Autowired
     RestTemplate restTemplate
     @Shared
-    MockRestServiceServer mockServer;
+    MockRestServiceServer mockServer
 
     def setup() {
         mockServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
