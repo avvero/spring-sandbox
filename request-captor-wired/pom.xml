@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pw.avvero</groupId>
-    <artifactId>request-captor</artifactId>
+    <artifactId>request-captor-wired</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Request captor for MockRestServiceServer</name>
+    <name>Wiremock Request captor for Wiremock</name>
     <description>Provides utility functions  to capture HTTP requests in tests. - https://github.com/avvero/spring-sandbox</description>
     <url>https://github.com/avvero/spring-sandbox</url>
 
@@ -37,6 +37,7 @@
         <lombok.version>1.18.30</lombok.version>
         <spring.boot.version>3.2.0</spring.boot.version>
         <spring.version>6.1.1</spring.version>
+        <wiremock.version>3.3.1</wiremock.version>
         <groovy.version>3.0.19</groovy.version>
         <logbook.version>3.7.0</logbook.version>
         <spock.version>2.3-groovy-3.0</spock.version>
@@ -66,6 +67,11 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-json</artifactId>
             <version>${groovy.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+            <version>${wiremock.version}</version>
         </dependency>
 
         <!-- Test Dependencies -->
@@ -149,7 +155,7 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
-                    <deploymentName>request-captor_${version}</deploymentName>
+                    <deploymentName>request-captor-wired_${version}</deploymentName>
                     <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>

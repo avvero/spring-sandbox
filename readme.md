@@ -20,7 +20,7 @@ MockRestServiceServer will be used as the mocking mechanism. There will also be 
 
 [Link to article (ENG)](https://medium.com/@avvero.abernathy/ordering-chaos-arranging-http-request-testing-in-spring-c625520d2418)
 
-## Request captor
+## Request captor for MockRestServiceServer
 
 The `RequestCaptor` class is designed to capture HTTP requests in tests. This class keeps track of how many times it 
 has matched a request (times), the body of the last request both as a string (bodyString) and as a parsed 
@@ -48,4 +48,35 @@ def "Forecast for provided city London is 42"() {
 Include the necessary dependency in your project's build configuration to utilize Request Captor:
 ```groovy
 testImplementation 'pw.avvero:request-captor:1.0.0'
+```
+
+## Request captor for Wiremock
+
+The `WiredRequestCaptor` class is designed to capture HTTP requests in tests. This class keeps track of how many times it 
+has matched a request (times), the body of the last request both as a string (bodyString) and as a parsed 
+JSON object (body), and the headers of the last request (headers).
+
+Please refer to the test below to get an insight.
+```groovy
+def "Forecast for provided city London is 42"() {
+    setup:
+    StubMapping forecastMapping = wireMockServer.stubFor(WireMock.post(WireMock.urlEqualTo("/forecast"))
+            .willReturn(WireMock.aResponse()
+                    .withBody('{"result": "42"}')
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")))
+    def requestCaptor = new WiredRequestCaptor(wireMockServer, forecastMapping)
+    when:
+    def forecast = weatherService.getForecast("London")
+    then:
+    forecast == "42"
+    requestCaptor.times == 1
+    requestCaptor.body.city == "London"
+    requestCaptor.headers.get("Content-Type") == ["application/json"]
+}
+```
+
+Include the necessary dependency in your project's build configuration to utilize Request Captor:
+```groovy
+testImplementation 'pw.avvero:request-captor-wired:1.0.0'
 ```

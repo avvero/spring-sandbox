@@ -36,19 +36,19 @@ class RequestCaptorTests extends Specification {
         mockServer.reset()
     }
 
-def "Forecast for provided city London is 42"() {
-    setup:          // (1)
-    def requestCaptor = new RequestCaptor()
-    mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com/forecast")) // (2)
-            .andExpect(method(HttpMethod.POST))
-            .andExpect(requestCaptor)                                                      // (3)
-            .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));      // (4)
-    when:          // (5)
-    def forecast = weatherService.getForecast("London")
-    then:          // (6)
-    forecast == "42"
-    requestCaptor.times == 1            // (7)
-    requestCaptor.body.city == "London" // (8)
-    requestCaptor.headers.get("Content-Type") == ["application/json"]
-}
+    def "Forecast for provided city London is 42"() {
+        setup:          // (1)
+        def requestCaptor = new RequestCaptor()
+        mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com/forecast")) // (2)
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(requestCaptor)                                                      // (3)
+                .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));      // (4)
+        when:          // (5)
+        def forecast = weatherService.getForecast("London")
+        then:          // (6)
+        forecast == "42"
+        requestCaptor.times == 1            // (7)
+        requestCaptor.body.city == "London" // (8)
+        requestCaptor.headers.get("Content-Type") == ["application/json"]
+    }
 }
