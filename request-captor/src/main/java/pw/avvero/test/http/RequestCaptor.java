@@ -1,15 +1,12 @@
-package pw.avvero.spring.sandbox.weather;
+package pw.avvero.test.http;
 
 import groovy.json.JsonSlurper;
 import lombok.Getter;
-import org.awaitility.Awaitility;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.mock.http.client.MockClientHttpRequest;
 import org.springframework.test.web.client.RequestMatcher;
-import org.springframework.util.StringUtils;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
@@ -24,22 +21,14 @@ public class RequestCaptor implements RequestMatcher {
         this.times.incrementAndGet();
         MockClientHttpRequest mockRequest = (MockClientHttpRequest) request;
         this.bodyString = mockRequest.getBodyAsString();
-        if (StringUtils.hasLength(this.bodyString)) {
+        if (!this.bodyString.isEmpty()) {
             this.body = (new JsonSlurper()).parseText(mockRequest.getBodyAsString());
         }
-
         this.headers = mockRequest.getHeaders();
     }
 
     public int getTimes() {
         return times.get();
-    }
-
-    public void await(long timeout, TimeUnit unit) {
-        Awaitility.await()
-                .alias("Request for " + this.getClass().getCanonicalName())
-                .atMost(timeout, unit)
-                .pollInterval(100L, TimeUnit.MILLISECONDS).until(() -> this.body != null);
     }
 
     public void clear() {

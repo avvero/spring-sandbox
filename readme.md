@@ -19,3 +19,33 @@ MockRestServiceServer will be used as the mocking mechanism. There will also be 
 [Link to article (RUS)](https://habr.com/ru/articles/781812)
 
 [Link to article (ENG)](https://medium.com/@avvero.abernathy/ordering-chaos-arranging-http-request-testing-in-spring-c625520d2418)
+
+## Request captor
+
+The `RequestCaptor` class is designed to capture HTTP requests in tests. This class keeps track of how many times it 
+has matched a request (times), the body of the last request both as a string (bodyString) and as a parsed 
+JSON object (body), and the headers of the last request (headers).
+
+Please refer to the test below to get an insight.
+```groovy
+def "Forecast for provided city London is 42"() {
+    setup:          // (1)
+    def requestCaptor = new RequestCaptor()
+    mockServer.expect(manyTimes(), requestTo("https://external-weather-api.com/forecast")) // (2)
+            .andExpect(method(HttpMethod.POST))
+            .andExpect(requestCaptor)                                                      // (3)
+            .andRespond(withSuccess('{"result": "42"}', MediaType.APPLICATION_JSON));      // (4)
+    when:          // (5)
+    def forecast = weatherService.getForecast("London")
+    then:          // (6)
+    forecast == "42"
+    requestCaptor.times == 1            // (7)
+    requestCaptor.body.city == "London" // (8)
+    requestCaptor.headers.get("Content-Type") == ["application/json"]
+}
+```
+
+Include the necessary dependency in your project's build configuration to utilize Request Captor:
+```groovy
+testImplementation 'pw.avvero:request-captor:1.0.0'
+```

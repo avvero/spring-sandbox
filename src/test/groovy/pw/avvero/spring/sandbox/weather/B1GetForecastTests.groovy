@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.web.client.RestTemplate
 import pw.avvero.spring.sandbox.ContainersConfiguration
+import pw.avvero.test.http.RequestCaptor
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
