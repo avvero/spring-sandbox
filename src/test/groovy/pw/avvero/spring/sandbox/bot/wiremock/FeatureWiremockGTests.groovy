@@ -1,4 +1,4 @@
-package pw.avvero.spring.sandbox.bot
+package pw.avvero.spring.sandbox.bot.wiremock
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -8,7 +8,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.ApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -35,12 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "openai.uri=http://localhost:10080"
 ])
 @DirtiesContext
-class FeatureWTests extends Specification {
+class FeatureWiremockGTests extends Specification {
 
     @Autowired
     RestTemplate restTemplate
-    @Autowired
-    ApplicationContext applicationContext
     @Autowired
     MockMvc mockMvc
     @Shared

@@ -1,12 +1,14 @@
-package pw.avvero.spring.sandbox.bot
+package pw.avvero.spring.sandbox.bot.wiremock
+
 
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.ApplicationContext
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.web.client.RestTemplate
 import pw.avvero.spring.sandbox.ContainersConfiguration
@@ -16,29 +18,32 @@ import spock.lang.Specification
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import static RestExpectationResponseCreator.withSuccess
+import static pw.avvero.spring.sandbox.bot.wiremock.CustomMockRestResponseCreators.withSuccess
 
 @SpringBootTest
 @ActiveProfiles(profiles = "test")
 @ContextConfiguration(classes = [ContainersConfiguration])
 @AutoConfigureMockMvc
-class FeatureTestsStep1 extends Specification {
+@TestPropertySource(properties = [
+        "telegram.uri=http://localhost:10080",
+        "openai.uri=http://localhost:10080"
+])
+@DirtiesContext
+class FeatureWiremockGTestsStep1 extends Specification {
 
     @Autowired
     RestTemplate restTemplate
-    @Autowired
-    ApplicationContext applicationContext
     @Autowired
     MockMvc mockMvc
     @Shared
     RestExpectation restExpectation
 
     def setup() {
-        restExpectation = new RestExpectation(restTemplate)
+        restExpectation = new RestExpectation(10080)
     }
 
     def cleanup() {
-        restExpectation.reset()
+        restExpectation.stop()
     }
 
     def "User Message Processing with OpenAI"() {
