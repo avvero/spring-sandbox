@@ -1,0 +1,39 @@
+{
+  "consumer": {
+    "name": "bot"
+  },
+  "provider": {
+    "name": "openai"
+  },
+  "interactions": [
+    {
+      "description": "Send message as a replay",
+      "request": {
+        "method": "POST",
+        "path": "sendMessage",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "chat_id": "200000",
+          "reply_to_message_id": "100000",
+          "text": "Hello there, how may I assist you today?"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

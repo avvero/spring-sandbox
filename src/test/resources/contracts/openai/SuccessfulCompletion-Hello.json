@@ -1,0 +1,60 @@
+{
+  "consumer": {
+    "name": "bot"
+  },
+  "provider": {
+    "name": "openai"
+  },
+  "interactions": [
+    {
+      "description": "Request completion from OpenAI with a user message 'Hello'",
+      "request": {
+        "method": "POST",
+        "path": "/v1/chat/completions",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "model": "gpt-3.5-turbo-0125",
+          "prompt": "Hello!",
+          "max_tokens": 50,
+          "n": 1,
+          "stop": null,
+          "temperature": 0.5
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "chatcmpl-123",
+          "object": "chat.completion",
+          "created": 1677652288,
+          "model": "gpt-3.5-turbo-0125",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "Hello there, how may I assist you today?"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 9,
+            "completion_tokens": 12,
+            "total_tokens": 21
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
