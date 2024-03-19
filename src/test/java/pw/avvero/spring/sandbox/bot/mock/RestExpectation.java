@@ -1,22 +1,29 @@
 package pw.avvero.spring.sandbox.bot.mock;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.response.DefaultResponseCreator;
 import org.springframework.web.client.RestTemplate;
+import pw.avvero.test.http.RequestCaptor;
 
-@Data
-@RequiredArgsConstructor
-public class RestExpectation {
+public class RestExpectation extends RestExpectationMockRestServiceServer {
 
-    private final MockRestServiceServer mockServer;
     public final OpenaiMock openai;
     public final TelegramMock telegram;
 
     public RestExpectation(RestTemplate restTemplate) {
-        this.mockServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
-        this.openai = new OpenaiMock(mockServer);
-        this.telegram = new TelegramMock(mockServer);
+        super(MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build());
+        this.openai = new OpenaiMock() {
+            @Override
+            public RequestCaptor completions(DefaultResponseCreator responseCreator) {
+                return map("https://api.openai.com/v1/chat/completions", responseCreator);
+            }
+        };
+        this.telegram = new TelegramMock() {
+            @Override
+            public RequestCaptor sendMessage(DefaultResponseCreator responseCreator) {
+                return map("https://api.telegram.org/sendMessage", responseCreator);
+            }
+        };
     }
 
     public void reset() {

@@ -80,3 +80,51 @@ Include the necessary dependency in your project's build configuration to utiliz
 ```groovy
 testImplementation 'pw.avvero:request-captor-wired:1.0.0'
 ```
+
+## Performance Improvement via PostgreSQL Container Configuration
+
+### Overview
+
+In our continuous effort to optimize our test suite, a significant resource-intensive method was identified during
+profiling. This method is related to the PostgreSQL JDBC driver's password protection mechanism during authentication.
+By modifying our PostgreSQL container's environment settings, we can achieve a noteworthy performance improvement.
+
+#### Identified Resource-Intensive Method
+
+The profiling session pinpointed a method consuming considerable resources:
+
+- `java.lang.invoke.VarHandleByteArrayAsInts$ArrayHandle.index`
+- `org.postgresql.shaded.com.ongres.scram.common.util.CryptoUtil.hi`
+- `org.postgresql.shaded.com.ongres.scram.common.ScramMechanisms.saltedPassword`
+
+These methods are part of the PostgreSQL JDBC driver, specifically involved in password protection during the authentication process.
+
+### Solution: Disabling Password Protection
+
+To bypass this resource-intensive password protection, we can disable it by setting an environment variable in our 
+PostgreSQL container definition. This change instructs the container to use the "trust" authentication method, 
+eliminating the need for password verification.
+
+#### Code Adjustment
+
+Modify the PostgreSQL container configuration as follows:
+
+```java
+private final static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(DockerImageName.parse("postgres:14"))
+        .withDatabaseName("accounts")
+        .withEnv("POSTGRES_HOST_AUTH_METHOD", "trust") // Disable password protection
+        .withCommand("postgres -c max_connections=300")
+        .waitingFor(Wait.forListeningPort());
+```
+
+### Performance Benchmark Results
+
+A [synthetic benchmark](benchmark/src/jmh/java/pw/avvero/spring/sandbox/PostgresqlContainerAuthModeBenchmark.java) 
+demonstrated a performance improvement when using the "trust" authentication method:
+```md
+Benchmark                                                               Mode  Cnt  Score   Error  Units
+PostgresqlContainerAuthModeBenchmark.methodDefaultOneConnection           ss    4  1,056 ± 0,050   s/op
+PostgresqlContainerAuthModeBenchmark.methodTrustOneConnection             ss   20  1,141 ± 0,082   s/op
+PostgresqlContainerAuthModeBenchmark.methodDefaultOneHundredConnection    ss   14  2,201 ± 0,095   s/op
+PostgresqlContainerAuthModeBenchmark.methodTrustOneHundredConnection      ss   20  1,635 ± 0,069   s/op
+```
