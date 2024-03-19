@@ -111,9 +111,7 @@ Modify the PostgreSQL container configuration as follows:
 
 ```java
 private final static PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>(DockerImageName.parse("postgres:14"))
-        .withDatabaseName("accounts")
         .withEnv("POSTGRES_HOST_AUTH_METHOD", "trust") // Disable password protection
-        .withCommand("postgres -c max_connections=300")
         .waitingFor(Wait.forListeningPort());
 ```
 
