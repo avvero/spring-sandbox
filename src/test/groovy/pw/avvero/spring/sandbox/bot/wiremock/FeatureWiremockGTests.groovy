@@ -83,7 +83,7 @@ class FeatureWiremockGTests extends Specification {
         def openaiRequestCaptor = new WiredRequestCaptor(wireMockServer, completionsMapping)
         StubMapping sendMessageMapping = wireMockServer.stubFor(WireMock.post(urlEqualTo("/sendMessage"))
                 .willReturn(aResponse()
-                        .withBody('{}')
+                        .withBody("{}")
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")))
         def telegramRequestCaptor = new WiredRequestCaptor(wireMockServer, sendMessageMapping)

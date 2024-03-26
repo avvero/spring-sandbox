@@ -42,7 +42,7 @@ class FeatureGTestsStep2 extends Specification {
     def "User Message Processing with OpenAI"() {
         setup:
         def openaiRequestCaptor = restExpectation.openai.completions(withSuccess(fromFile("json/openai/response.json")))
-        def telegramRequestCaptor = restExpectation.telegram.sendMessage(withSuccess('{}'))
+        def telegramRequestCaptor = restExpectation.telegram.sendMessage(withSuccess("{}"))
         when:
         mockMvc.perform(post("/telegram/webhook")
                 .contentType(APPLICATION_JSON_VALUE)

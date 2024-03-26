@@ -76,7 +76,7 @@ class FeatureGTests extends Specification {
         mockServer.expect(manyTimes(), requestTo("https://api.telegram.org/sendMessage"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(telegramRequestCaptor)
-                .andRespond(withSuccess('{}', MediaType.APPLICATION_JSON))
+                .andRespond(withSuccess("{}", MediaType.APPLICATION_JSON))
         when:
         mockMvc.perform(post("/telegram/webhook")
                 .contentType(APPLICATION_JSON_VALUE)

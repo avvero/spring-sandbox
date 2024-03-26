@@ -69,7 +69,7 @@ class FeatureWiremockGTestsStep1 extends Specification {
                 "total_tokens": 21
             }
         }"""))
-        def telegramRequestCaptor = restExpectation.telegram.sendMessage(withSuccess('{}'))
+        def telegramRequestCaptor = restExpectation.telegram.sendMessage(withSuccess("{}"))
         when:
         mockMvc.perform(post("/telegram/webhook")
                 .contentType(APPLICATION_JSON_VALUE)
