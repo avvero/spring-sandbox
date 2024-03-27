@@ -1,6 +1,5 @@
 package pw.avvero.spring.sandbox.bot.wiremock
 
-
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -15,9 +14,12 @@ import pw.avvero.spring.sandbox.ContainersConfiguration
 import spock.lang.Shared
 import spock.lang.Specification
 
+import static org.springframework.http.HttpStatus.FORBIDDEN
+import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import static pw.avvero.spring.sandbox.bot.wiremock.CustomMockRestResponseCreators.withStatus
 import static pw.avvero.spring.sandbox.bot.wiremock.CustomMockRestResponseCreators.withSuccess
 
 @SpringBootTest
@@ -113,5 +115,43 @@ class FeatureWiremockGTestsStep1 extends Specification {
             "reply_to_message_id": "100000",
             "text": "Hello there, how may I assist you today?"
         }""", telegramRequestCaptor.bodyString, false)
+    }
+
+    def "Processing fails if access to openai is not available"() {
+        setup:
+        def openaiRequestCaptor = restExpectation.openai.completions(openaiResponse)
+        def telegramRequestCaptor = restExpectation.telegram.sendMessage(withSuccess("{}"))
+        when:
+        mockMvc.perform(post("/telegram/webhook")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content("""{
+                    "update_id": 134078166,
+                    "message": {
+                        "message_id": 100000,
+                        "from": {
+                            "id": 50000,
+                            "is_bot": false,
+                            "first_name": "Ivav",
+                            "last_name": "Ivanov",
+                            "username": "ivan",
+                            "language_code": "ru"
+                        },
+                        "chat": {
+                            "id": 200000,
+                            "title": "Bot"
+                        },
+                        "date": 1710132752,
+                        "text": "Hello!"
+                    }
+                }""".toString())
+                .accept(APPLICATION_JSON_VALUE))
+                .andExpect(status().is(500))
+        then:
+        openaiRequestCaptor.times == 1
+        telegramRequestCaptor.times == 0
+        where:
+        openaiResponse        | _
+        withStatus(NOT_FOUND) | _
+        withStatus(FORBIDDEN) | _
     }
 }

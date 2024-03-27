@@ -9,13 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.codehaus.groovy.runtime.IOGroovyMethods;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.intellij.lang.annotations.Language;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 
@@ -27,6 +25,11 @@ public class CustomMockRestResponseCreators {
                 .withBody(body)
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json");
+    }
+
+    public static ResponseDefinitionBuilder withStatus(HttpStatus httpStatus) {
+        return aResponse()
+                .withStatus(httpStatus.value());
     }
 
     public static ResponseDefinitionBuilder fromContract(String contractFileName) {
