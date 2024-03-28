@@ -1,6 +1,5 @@
 package pw.avvero.spring.sandbox.bot.mock
 
-import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,6 +13,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static CustomMockRestResponseCreators.withSuccess
+import static org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import static org.springframework.http.HttpStatus.FORBIDDEN
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -93,22 +93,20 @@ class FeatureGTestsStep1 extends Specification {
                 .andExpect(status().isOk())
         then:
         openaiRequestCaptor.times == 1
-        JSONAssert.assertEquals("""{
-                "model": "gpt-3.5-turbo",
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": "Hello!"
-                    }
-                ]
-            }""", openaiRequestCaptor.bodyString, false)
+        assertEquals("""{
+            "model": "gpt-3.5-turbo",
+            "messages": [{
+                "role": "user",
+                "content": "Hello!"
+            }]
+        }""", openaiRequestCaptor.bodyString, false)
         and:
         telegramRequestCaptor.times == 1
-        JSONAssert.assertEquals("""{
-                "chat_id": "200000",
-                "reply_to_message_id": "100000",
-                "text": "Hello there, how may I assist you today?"
-            }""", telegramRequestCaptor.bodyString, false)
+        assertEquals("""{
+            "chat_id": "200000",
+            "reply_to_message_id": "100000",
+            "text": "Hello there, how may I assist you today?"
+        }""", telegramRequestCaptor.bodyString, false)
     }
 
     @Unroll

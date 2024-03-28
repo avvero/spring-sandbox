@@ -114,21 +114,14 @@ class FeatureWiremockGTests extends Specification {
                 .andExpect(status().isOk())
         then:
         openaiRequestCaptor.times == 1
-        JSONAssert.assertEquals("""{
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "Hello!"
-                }
-            ]
-        }""", openaiRequestCaptor.bodyString, false)
+        openaiRequestCaptor.body.model == "gpt-3.5-turbo"
+        openaiRequestCaptor.body.messages.size() == 1
+        openaiRequestCaptor.body.messages[0].role == "user"
+        openaiRequestCaptor.body.messages[0].content == "Hello!"
         and:
         telegramRequestCaptor.times == 1
-        JSONAssert.assertEquals("""{
-            "chat_id": "200000",
-            "reply_to_message_id": "100000",
-            "text": "Hello there, how may I assist you today?"
-        }""", telegramRequestCaptor.bodyString, false)
+        telegramRequestCaptor.body.chat_id == "200000"
+        telegramRequestCaptor.body.reply_to_message_id == "100000"
+        telegramRequestCaptor.body.text == "Hello there, how may I assist you today?"
     }
 }
