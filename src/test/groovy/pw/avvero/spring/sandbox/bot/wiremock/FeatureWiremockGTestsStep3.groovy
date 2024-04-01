@@ -44,7 +44,7 @@ class FeatureWiremockGTestsStep3 extends Specification {
     }
 
     def cleanup() {
-        restExpectation.stop()
+        restExpectation.cleanup()
     }
 
     def "User Message Processing with OpenAI"() {

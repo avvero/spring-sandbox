@@ -39,7 +39,7 @@ class FeatureGTestsStep1 extends Specification {
     }
 
     def cleanup() {
-        restExpectation.reset()
+        restExpectation.cleanup()
     }
 
     def "User Message Processing with OpenAI"() {

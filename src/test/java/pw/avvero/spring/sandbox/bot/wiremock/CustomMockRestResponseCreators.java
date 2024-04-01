@@ -6,6 +6,7 @@ import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.Response;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.StringSubstitutor;
 import org.codehaus.groovy.runtime.IOGroovyMethods;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.intellij.lang.annotations.Language;
@@ -14,6 +15,7 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 
@@ -45,6 +47,11 @@ public class CustomMockRestResponseCreators {
     }
 
     public static String fromFile(String testResourceFile) throws IOException {
-        return IOGroovyMethods.getText(ResourceGroovyMethods.newReader(new File("src/test/resources/" + testResourceFile)));
+        return fromFile(testResourceFile, Map.of());
+    }
+
+    public static String fromFile(String file, Map<String, Object> values) throws IOException {
+        String text = IOGroovyMethods.getText(ResourceGroovyMethods.newReader(new File("src/test/resources/" + file)));
+        return new StringSubstitutor(values).replace(text);
     }
 }

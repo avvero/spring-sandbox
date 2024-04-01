@@ -27,7 +27,7 @@ public class RestExpectation extends RestExpectationMockRestServiceServer {
         };
     }
 
-    public void reset() {
+    public void cleanup() {
         mockServer.reset();
     }
 }

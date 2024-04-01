@@ -22,7 +22,7 @@ public class RestExpectation {
         this.telegram = new TelegramMock(wireMockServer);
     }
 
-    public void stop() {
+    public void cleanup() {
         wireMockServer.stop();
     }
 }
