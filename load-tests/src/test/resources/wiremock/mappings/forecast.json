@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/forecast"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"result\": 42}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

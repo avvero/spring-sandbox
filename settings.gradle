@@ -1,5 +1,6 @@
 include 'request-captor'
 include 'request-captor-wired'
 include 'benchmark'
+include 'load-tests'
 
 rootProject.name = 'sandbox'

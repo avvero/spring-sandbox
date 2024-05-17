@@ -1,0 +1,22 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:10
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sandbox
+      - POSTGRES_DB=sandbox
+      - POSTGRES_PASSWORD=sandbox
+  sandbox:
+    image: avvero/sandbox:latest
+    container_name: sandbox
+    environment:
+      - key:value
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/sandbox
+      - spring.datasource.username=sandbox
+      - spring.datasource.password=sandbox
+      - spring.jpa.properties.hibernate.default_schema=sandbox
+    ports:
+      - "8080:8080"

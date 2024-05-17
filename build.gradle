@@ -1,15 +1,16 @@
 plugins {
-	id 'java'
-	id 'groovy'
-	id 'org.springframework.boot' version '3.2.0'
-	id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'groovy'
+    id 'application'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'pw.avvero.spring'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '21'
 }
 
 configurations {
@@ -19,48 +20,53 @@ configurations {
 }
 
 allprojects {
-	repositories {
-		mavenCentral()
-		maven { url 'https://jitpack.io' }
-	}
+	apply plugin: 'java'
 
-	group = 'pw.avvero'
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
 
-	java {
-		sourceCompatibility = '17'
-	}
+    group = 'pw.avvero'
+
+    java {
+        sourceCompatibility = '17'
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.30'
+        annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+		testCompileOnly "org.projectlombok:lombok:1.18.30"
+		testAnnotationProcessor "org.projectlombok:lombok:1.18.30"
+    }
 }
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.springframework.retry:spring-retry:2.0.4"
+    implementation 'org.flywaydb:flyway-core' // TODO from bom?
+    runtimeOnly 'org.postgresql:postgresql'   // TODO from bom?
 
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation "org.springframework.retry:spring-retry:2.0.4"
-	implementation 'org.flywaydb:flyway-core' // TODO from bom?
-	runtimeOnly 'org.postgresql:postgresql'   // TODO from bom?
+    implementation 'org.zalando:logbook-spring-boot-starter:3.7.0'
 
-	implementation 'org.zalando:logbook-spring-boot-starter:3.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql' // TODO from bom?
+    testImplementation 'org.codehaus.groovy:groovy-json:3.0.19'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
+    testImplementation 'org.wiremock:wiremock-standalone:3.3.1'
 
-	testCompileOnly "org.projectlombok:lombok"
-	testAnnotationProcessor "org.projectlombok:lombok"
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.boot:spring-boot-devtools'
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:postgresql' // TODO from bom?
-	testImplementation 'org.codehaus.groovy:groovy-json:3.0.19'
-	testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
-	testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
-	testImplementation 'org.wiremock:wiremock-standalone:3.3.1'
-
-	testImplementation 'pw.avvero:request-captor:1.0.0'
-	testImplementation 'pw.avvero:request-captor-wired:1.0.0'
-	testImplementation 'org.apache.commons:commons-text:1.11.0'
-	testImplementation 'au.com.dius.pact.consumer:junit:4.6.7'
+    testImplementation 'pw.avvero:request-captor:1.0.0'
+    testImplementation 'pw.avvero:request-captor-wired:1.0.0'
+    testImplementation 'org.apache.commons:commons-text:1.11.0'
+    testImplementation 'au.com.dius.pact.consumer:junit:4.6.7'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
