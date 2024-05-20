@@ -18,7 +18,7 @@ class GatlingTests extends Specification {
         def workingDirectory = new File("").getAbsolutePath()
         def reportDirectory = workingDirectory + "/build/" + new Date().getTime()
         for (String tempDir : ["/logs", "/jfr", "/gatling-results"]) {
-            File tempDirectory = new File(tempDir)
+            File tempDirectory = new File(reportDirectory + tempDir)
             if (!tempDirectory.exists() && !tempDirectory.mkdirs()) {
                 throw new UnsupportedOperationException()
             }
@@ -43,6 +43,11 @@ class GatlingTests extends Specification {
         then:
         "Ok" == helper.execInContainer("wget", "-O", "-", "http://wiremock:8080/health").getStdout()
         when:
+        def postgres = new GenericContainer<>("postgres:10")
+                .withNetwork(network)
+                .withNetworkAliases("postgres")
+                .withEnv(["POSTGRES_USER": "sandbox", "POSTGRES_DB": "sandbox", "POSTGRES_PASSWORD": "sandbox"])
+        postgres.start()
         def javaOpts = ' -Xloggc:/tmp/gc/gc.log -XX:+PrintGCDetails' + ' -XX:+UnlockDiagnosticVMOptions' + ' -XX:+FlightRecorder' + ' -XX:StartFlightRecording:settings=default,dumponexit=true,disk=true,duration=120s,filename=/tmp/jfr/flight.jfr'
         def sandbox = new GenericContainer<>(image)
                 .withNetwork(network)
@@ -50,20 +55,25 @@ class GatlingTests extends Specification {
                 .withFileSystemBind(reportDirectory + "/logs", "/tmp/gc", READ_WRITE)
                 .withFileSystemBind(reportDirectory + "/jfr", "/tmp/jfr", READ_WRITE)
                 .withEnv([
-                        'JAVA_OPTS'      : javaOpts,
-                        'app.weather.url': "http://wiremock:8080"
+                        'JAVA_OPTS'                                     : javaOpts,
+                        'app.weather.url'                               : 'http://wiremock:8080',
+                        'spring.datasource.url'                         : 'jdbc:postgresql://postgres:5432/sandbox',
+                        'spring.datasource.username'                    : 'sandbox',
+                        'spring.datasource.password'                    : 'sandbox',
+                        'spring.jpa.properties.hibernate.default_schema': 'sandbox'
                 ])
-                .waitingFor(new LogMessageWaitStrategy().withRegEx(".*Started Application.*"))
-                .withStartupTimeout(Duration.ofSeconds(60L * 5))
+                .waitingFor(new LogMessageWaitStrategy().withRegEx(".*Started SandboxApplication.*"))
+                .withStartupTimeout(Duration.ofSeconds(10))
         sandbox.start()
         then:
         "" != helper.execInContainer("wget", "-O", "-", "http://sandbox:8080/actuator/health").getStdout()
         when:
         def gatling = new GenericContainer<>("denvazh/gatling:3.2.1")
+                .withNetwork(network)
                 .withFileSystemBind(reportDirectory + "/gatling-results", "/opt/gatling/results", READ_WRITE)
                 .withFileSystemBind(workingDirectory + "/src/gatling/scala", "/opt/gatling/user-files/simulations", READ_WRITE)
                 .withFileSystemBind(workingDirectory + "/src/gatling/resources", "/opt/gatling/conf", READ_WRITE)
-                .withEnv("sandbox", "http://sandbox:8080")
+                .withEnv("SERVICE_URL", "http://sandbox:8080")
                 .withCommand("-s", "MainSimulation")
                 .waitingFor(new LogMessageWaitStrategy()
                         .withRegEx(".*Please open the following file: /opt/gatling/results.*")
@@ -73,10 +83,11 @@ class GatlingTests extends Specification {
         then:
         noExceptionThrown()
         cleanup:
-        helper.stop()
-        wiremock.stop()
-        sandbox.stop()
-        gatling.stop()
+        helper?.stop()
+        wiremock?.stop()
+        sandbox?.stop()
+        postgres?.stop()
+        gatling?.stop()
         where:
         image                  | _
         'avvero/sandbox:1.0.0' | _

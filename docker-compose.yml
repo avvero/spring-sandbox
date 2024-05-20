@@ -1,22 +1,25 @@
-version: '2'
+version: '3.3'
 services:
   postgres:
     image: postgres:10
     container_name: postgres
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=sandbox
       - POSTGRES_DB=sandbox
       - POSTGRES_PASSWORD=sandbox
+  wiremock:
+    image: wiremock/wiremock:3.5.4
+    container_name: wiremock
+    volumes:
+      - ./load-tests/src/test/resources/wiremock/mappings:/home/wiremock/mappings
   sandbox:
     image: avvero/sandbox:latest
     container_name: sandbox
     environment:
-      - key:value
       - spring.datasource.url=jdbc:postgresql://postgres:5432/sandbox
       - spring.datasource.username=sandbox
       - spring.datasource.password=sandbox
       - spring.jpa.properties.hibernate.default_schema=sandbox
+      - app.weather.url=http://wiremock:8080
     ports:
       - "8080:8080"

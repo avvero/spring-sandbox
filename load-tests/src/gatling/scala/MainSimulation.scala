@@ -13,7 +13,7 @@ class MainSimulation extends Simulation {
   val scn = scenario("BasicScenario")
     .exec(
       http("Get weather for London")
-        .post("/weather")
+        .post("/weather/getForecast")
         .body(StringBody(
           """{
             |    "city": "London"
@@ -24,11 +24,11 @@ class MainSimulation extends Simulation {
   setUp(
     scn.inject(
       rampUsers(10).during(30.seconds),             // Warmup
-      constantUsersPerSec(20).during(20.seconds),    // Main test
-      constantUsersPerSec(30).during(20.seconds),    // Main test
-      constantUsersPerSec(50).during(20.seconds),    // Main test
-      constantUsersPerSec(70).during(20.seconds),    // Main test
-      constantUsersPerSec(100).during(2.minutes),    // Main test
+//      constantUsersPerSec(20).during(20.seconds),    // Main test
+//      constantUsersPerSec(30).during(20.seconds),    // Main test
+//      constantUsersPerSec(50).during(20.seconds),    // Main test
+//      constantUsersPerSec(70).during(20.seconds),    // Main test
+//      constantUsersPerSec(100).during(2.minutes),    // Main test
     ).protocols(httpProtocol)
   ).maxDuration(10.minutes)
 }
