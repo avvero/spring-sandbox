@@ -62,6 +62,7 @@ class GatlingTests extends Specification {
                         'spring.datasource.password'                    : 'sandbox',
                         'spring.jpa.properties.hibernate.default_schema': 'sandbox'
                 ])
+                .withLogConsumer(new FileHeadLogConsumer(reportDirectory + "/logs/" + "sandbox" + ".log"))
                 .waitingFor(new LogMessageWaitStrategy().withRegEx(".*Started SandboxApplication.*"))
                 .withStartupTimeout(Duration.ofSeconds(10))
         sandbox.start()
