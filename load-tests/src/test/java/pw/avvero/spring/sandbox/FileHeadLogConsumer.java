@@ -19,7 +19,7 @@ public class FileHeadLogConsumer extends BaseConsumer<FileHeadLogConsumer> imple
 
     @Override
     public void accept(OutputFrame outputFrame) {
-        if (outputFrame.getBytes() == null || outputFrame.getBytes().length == 0 || size > 1000_000) return;
+        if (outputFrame.getBytes() == null || outputFrame.getBytes().length == 0 || size > 100_000) return;
         size += outputFrame.getBytes().length;
         if (outputFrame.getBytes() == null || outputFrame.getBytes().length == 0) return;
         try {
