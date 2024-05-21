@@ -1,17 +1,19 @@
-﻿<configuration>
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
 		</encoder>
+		<immediateFlush>false</immediateFlush>
 	</appender>
 
-	<root level="info">
-		<appender-ref ref="STDOUT"/>
+	<!-- uncomment and set to DEBUG to log all failing HTTP requests -->
+	<!-- uncomment and set to TRACE to log all HTTP requests -->
+	<!--<logger name="io.gatling.http.engine.response" level="TRACE" />-->
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE" />
 	</root>
 
-	<logger name="org.testcontainers" level="INFO"/>
-	<!-- The following logger can be used for containers logs since 1.18.0 -->
-	<logger name="tc" level="INFO"/>
-	<logger name="com.github.dockerjava" level="WARN"/>
-	<logger name="com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.wire" level="OFF"/>
 </configuration>
