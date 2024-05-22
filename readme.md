@@ -185,3 +185,8 @@ performance/
 Using options like `dumponexit=true,disk=true` with `-XX:StartFlightRecording:settings=` should ideally force JFR 
 to write metrics. However, in some cases, this doesn't work as expected. To ensure proper recording, it's necessary 
 to manipulate timings. Please ensure that tests run for a duration longer than the `duration=120s` setting.
+
+### Yandex tank
+```python
+echo "POST||http://sandbox:8080/weather/getForecast||get forecast||{\"city\": \"London\"}" | ./make_ammo.py
+```
