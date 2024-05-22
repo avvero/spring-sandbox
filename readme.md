@@ -188,5 +188,6 @@ to manipulate timings. Please ensure that tests run for a duration longer than t
 
 ### Yandex tank
 ```python
-echo "POST||http://sandbox:8080/weather/getForecast||get forecast||{\"city\": \"London\"}" | ./make_ammo.py
+echo "POST||/weather/getForecast||get forecast||{\"city\": \"London\"}" | ./make_ammo.py
+echo "POST||/weather/getForecast||get_forecast||{\"city\": \"London\"}" | python3 load-tests/src/test/resources/yandex-tank/make_ammo.py
 ```

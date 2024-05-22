@@ -1,9 +1,9 @@
-166 getforecast
-POST http://sandbox:8080/weather/getForecast HTTP/1.1
-Host: hostname.com
+158 get_forecast
+POST /weather/getForecast HTTP/1.1
+Host: sandbox:8080
 User-Agent: tank
-Accept: */*
+Content-Type: application/json
 Connection: Close
-Content-Length: 17
+Content-Length: 18
 
-{"city":"London"}
+{"city": "London"}

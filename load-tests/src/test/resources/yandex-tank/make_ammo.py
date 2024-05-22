@@ -47,9 +47,9 @@ def main():
 
         method, url, case = method.strip(), url.strip(), case.strip()
 
-        headers = "Host: hostname.com\r\n" + \
+        headers = "Host: sandbox:8080\r\n" + \
                   "User-Agent: tank\r\n" + \
-                  "Accept: */*\r\n" + \
+                  "Content-Type: application/json\r\n" + \
                   "Connection: Close"
 
         sys.stdout.write(make_ammo(method, url, headers, case, body))

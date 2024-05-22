@@ -73,7 +73,11 @@ class YandexTankTests extends Specification {
                 .withNetwork(network)
                 .withFileSystemBind(workingDirectory + "/src/test/resources/yandex-tank", "/var/loadtest", READ_WRITE)
                 .withEnv("SERVICE_URL", "http://sandbox:8080")
-//                .withCommand("yandex-tank", "-c", "load.yaml")
+//                .withCreateContainerCmdModifier(cmd -> {
+//                    cmd.getHostConfig()
+//                            .withMemory(1024 * 1024 * 1024L)
+//                            .withMemorySwap(1024 * 1024 * 1024L);
+//                })
                 .withLogConsumer(new FileHeadLogConsumer(reportDirectory + "/logs/" + "yandex-tank" + ".log"))
                 .waitingFor(new LogMessageWaitStrategy()
                         .withRegEx(".*Please open the following file: /opt/gatling/results.*")
