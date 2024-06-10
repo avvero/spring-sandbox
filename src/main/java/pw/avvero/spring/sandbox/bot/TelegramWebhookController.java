@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-
 public class TelegramWebhookController {
 
     private final OpenaiService openaiService;

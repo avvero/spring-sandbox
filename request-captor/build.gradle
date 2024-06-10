@@ -1,21 +1,14 @@
 plugins {
     id 'java'
     id 'groovy'
-    id 'application'
-    id 'org.springframework.boot' version '3.2.0'
+    id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
     implementation 'org.springframework:spring-web:6.1.1'
     implementation 'org.springframework:spring-test:6.1.1'
     implementation 'org.codehaus.groovy:groovy-json:3.0.19'
-
-    testCompileOnly "org.projectlombok:lombok:1.18.30"
-    testAnnotationProcessor "org.projectlombok:lombok:1.18.30"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
