@@ -6,8 +6,8 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-web:6.1.1'
-    implementation 'org.springframework:spring-test:6.1.1'
+    implementation 'org.springframework:spring-web:6.1.5'
+    implementation 'org.springframework:spring-test:6.1.5'
     implementation 'org.codehaus.groovy:groovy-json:3.0.19'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
