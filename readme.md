@@ -1,3 +1,10 @@
+### Overview
+**Problem**: Need a typical modern Spring Boot application to describe various scenarios and provide solutions for common problems.\
+**Solution**: Repository with a fresh Spring Boot application covering various scenarios.\
+**Status**: Completed, article is published, currently using.
+
+----
+
 # Sandbox for spring related stuff
 
 ## Testcontainers configuration
