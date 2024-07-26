@@ -23,9 +23,18 @@ with mocking of HTTP requests to external resources encountered during the execu
 system behavior. The tests under consideration are written using the Spock Framework in the Groovy language. 
 MockRestServiceServer will be used as the mocking mechanism. There will also be a few words about WireMock.
 
-[Link to article (RUS)](https://habr.com/ru/articles/781812)
+Article on Habr [Разносим по полочкам этапы тестирования http запросов в Spring](https://habr.com/ru/articles/781812)
 
-[Link to article (ENG)](https://medium.com/@avvero.abernathy/ordering-chaos-arranging-http-request-testing-in-spring-c625520d2418)
+Article on Medium [Ordering Chaos: Arranging HTTP Request Testing in Spring](https://medium.com/@avvero.abernathy/ordering-chaos-arranging-http-request-testing-in-spring-c625520d2418)
+
+## Enhancing the Visibility of Integration Tests
+
+Offers practical recommendations for writing integration tests, demonstrating how to focus on the specifications of interactions with external services, making the tests more readable and easier to maintain. The approach not only enhances the efficiency of testing but also promotes a better understanding of the integration processes within the application. Through the lens of specific examples, various strategies and tools — such as DSL wrappers, JsonAssert, and Pact — will be explored, offering the reader a comprehensive guide to improving the quality and visibility of integration tests.
+
+Article on Habr [Повышение наглядности интеграционных тестов](https://habr.com/ru/articles/804673/)
+
+Article on Medium [Enhancing the Visibility of Integration Tests](
+https://medium.com/@avvero.abernathy/enhancing-the-visibility-of-http-tests-24ce9493aae3)
 
 ### Request captor for MockRestServiceServer
 
