@@ -5,6 +5,8 @@ import au.com.dius.pact.core.model.RequestResponseInteraction;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.Response;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.http.Fault;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.StringSubstitutor;
 import org.codehaus.groovy.runtime.IOGroovyMethods;
@@ -15,6 +17,7 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -32,6 +35,18 @@ public class CustomMockRestResponseCreators {
     public static ResponseDefinitionBuilder withStatus(HttpStatus httpStatus) {
         return aResponse()
                 .withStatus(httpStatus.value());
+    }
+
+    public static ResponseDefinitionBuilder withStatus(HttpStatus httpStatus, String body) {
+        return WireMock.aResponse().withBody(body).withStatus(httpStatus.value());
+    }
+
+    public static ResponseDefinitionBuilder withDelay(Duration delay, ResponseDefinitionBuilder responseDefinitionBuilder) {
+        return responseDefinitionBuilder.withFixedDelay((int) delay.toMillis());
+    }
+
+    public static ResponseDefinitionBuilder withConnectionReset() {
+        return WireMock.aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER);
     }
 
     public static ResponseDefinitionBuilder fromContract(String contractFileName) {

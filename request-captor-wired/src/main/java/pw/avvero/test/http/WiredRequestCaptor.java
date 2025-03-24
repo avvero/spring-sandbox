@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import groovy.json.JsonSlurper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -42,7 +43,13 @@ public class WiredRequestCaptor {
     }
 
     public HttpHeaders getHeaders() {
-        return new HttpHeaders(wireMockServer.findAll(like(mapping.getRequest())).get(0).getHeaders().all().stream().collect(toMap(h -> h.caseInsensitiveKey().value(), HttpHeader::values, (a, b) -> b, HttpHeaders::new)));
+        MultiValueMap<String, String> headers = wireMockServer
+                .findAll(like(mapping.getRequest()))
+                .get(0)
+                .getHeaders()
+                .all().stream()
+                .collect(toMap(h -> h.caseInsensitiveKey().value(), HttpHeader::values, (a, b) -> b, HttpHeaders::new));
+        return new HttpHeaders(headers);
     }
 
     public int getTimes() {
@@ -51,5 +58,14 @@ public class WiredRequestCaptor {
 
     public String getUrl() {
         return mapping.getRequest().getUrl();
+    }
+
+    public record WiredRequestCaptorSeriesEntry(String bodyString) {
+    }
+
+    public List<WiredRequestCaptorSeriesEntry> getSeries() {
+        return findAll().stream()
+                .map(it -> new WiredRequestCaptorSeriesEntry(it.getBodyAsString()))
+                .toList();
     }
 }
